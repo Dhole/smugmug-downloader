@@ -210,54 +210,13 @@ type AlbumResponseV1 struct {
 	}
 }
 
-// Main url:
-// curl 'https://modelindexdatabase.smugmug.com/api/v2/node/4nXMLW!children?_shorturis&APIKey=W0g9oqdOrzuhEpIQ2qaTXimrzsfryKSZ&_accept=application%2Fjson&_verbose&Type=Folder%20Album%20Page&SortMethod=Organizer&SortDirection=Descending&count=49&start=1&_expand=HighlightImage%3F_shorturis%3D.ImageSizeDetails%3F_shorturis%3D%2CHighlightImage%3F_shorturis%3D.ImageAlbum%3F_shorturis%3D%2CHighlightImage%3F_shorturis%3D.PointOfInterestCrops%3F_shorturis%3D' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0' -H 'Accept: application/json' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Connection: keep-alive' -H 'Referer: https://modelindexdatabase.smugmug.com/browse' -H 'Cookie: Sreferrer=https%3A%2F%2Fonairvideo.com%2F; SMSESS=8dcca98ca4fe18d84bb9d2feb2dcd3f3; sp=eb736d03-932d-4795-a1e5-ed4fc68f04f4' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-origin' -H 'DNT: 1' -H 'Sec-GPC: 1' -H 'TE: trailers'
-//
-// Croquis-Cafe-Model-Photo-Database:
-// curl 'https://modelindexdatabase.smugmug.com/api/v2/node/HhLVs7!children?_shorturis&APIKey=W0g9oqdOrzuhEpIQ2qaTXimrzsfryKSZ&_accept=application%2Fjson&_verbose&Type=Folder%20Album%20Page&SortMethod=Organizer&SortDirection=Descending&count=49&start=1&_expand=HighlightImage%3F_shorturis%3D.ImageSizeDetails%3F_shorturis%3D%2CHighlightImage%3F_shorturis%3D.ImageAlbum%3F_shorturis%3D%2CHighlightImage%3F_shorturis%3D.PointOfInterestCrops%3F_shorturis%3D' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0' -H 'Accept: application/json' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Connection: keep-alive' -H 'Referer: https://modelindexdatabase.smugmug.com/Croquis-Cafe-Model-Photo-Database' -H 'Cookie: Sreferrer=https%3A%2F%2Fonairvideo.com%2F; SMSESS=8dcca98ca4fe18d84bb9d2feb2dcd3f3; sp=eb736d03-932d-4795-a1e5-ed4fc68f04f4' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-origin' -H 'DNT: 1' -H 'Sec-GPC: 1' -H 'Cache-Control: max-age=0' -H 'TE: trailers'
-//
-// Croquis-Cafe-Model-Photo-Database/Samantha:
-// curl 'https://modelindexdatabase.smugmug.com/services/api/json/1.4.0/?galleryType=album&albumId=264777298&albumKey=vqHdfn&nodeId=ncxM7d&PageNumber=0&imageId=0&imageKey=&returnModelList=true&PageSize=30&imageSizes=L%2CXL&method=rpc.gallery.getalbum' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0' -H 'Accept: application/json' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'X-Requested-With: XMLHttpRequest' -H 'sentry-trace: 01db2a844b9c47c580e3357619725f04-944e01c427817310-0' -H 'Connection: keep-alive' -H 'Referer: https://modelindexdatabase.smugmug.com/Croquis-Cafe-Model-Photo-Database/Samantha/' -H 'Cookie: Sreferrer=https%3A%2F%2Fonairvideo.com%2F; SMSESS=8dcca98ca4fe18d84bb9d2feb2dcd3f3; sp=eb736d03-932d-4795-a1e5-ed4fc68f04f4' -H 'Sec-Fetch-Dest: empty' -H 'Sec-Fetch-Mode: cors' -H 'Sec-Fetch-Site: same-origin' -H 'DNT: 1' -H 'Sec-GPC: 1' -H 'Cache-Control: max-age=0' -H 'TE: trailers'
-//
-// Croquis-Cafe-Model-Photo-Database/Samantha (1)
-// https://photos.smugmug.com/photos/i-xRxXBPQ/0/X4/i-xRxXBPQ-X4.jpg
-// Croquis-Cafe-Model-Photo-Database/Samantha (2) Original size
-// https://photos.smugmug.com/photos/i-zFF7RGz/0/O/i-zFF7RGz-O.jpg
-
-// type AlbumURLBuilderV1 struct {
-// }
-//
-// func (b *AlbumURLBuilderV1) URL(nodeID string, start int) string {
-// 	baseURL := "https://modelindexdatabase.smugmug.com"
-// 	albumURL, err := url.Parse(fmt.Sprintf("%v/services/api/json/1.4.0/", baseURL))
-// 	if err != nil {
-// 		log.Fatalf("Unable to parse baseURL: %v", err)
-// 	}
-//
-// 	params := url.Values{}
-// 	params.Add("galleryType", "album")
-// 	params.Add("albumId", "264777298")
-// 	params.Add("albumKey", "vqHdfn")
-// 	params.Add("nodeId", nodeID)
-// 	params.Add("PageNumber", fmt.Sprintf("%v", start))
-// 	params.Add("imageId", "0")
-// 	params.Add("imageKey", "")
-// 	params.Add("returnModelList", "true")
-// 	params.Add("PageSize", "32")
-// 	params.Add("imageSizes", "O")
-// 	params.Add("method", "rpc.gallery.getalbum")
-//
-// 	albumURL.RawQuery = params.Encode()
-// 	return albumURL.String()
-// }
-
 type AlbumURLBuilder struct {
-	APIKey string
+	APIKey  string
+	BaseURL string
 }
 
 func (b *AlbumURLBuilder) URL(albumID string, start int) (string, error) {
-	baseURL := "https://modelindexdatabase.smugmug.com"
-	albumURL, err := url.Parse(fmt.Sprintf("%v/api/v2/album/%v!images", baseURL, albumID))
+	albumURL, err := url.Parse(fmt.Sprintf("%v/api/v2/album/%v!images", b.BaseURL, albumID))
 	if err != nil {
 		return "", fmt.Errorf("Unable to parse baseURL: %w", err)
 	}
@@ -271,7 +230,6 @@ func (b *AlbumURLBuilder) URL(albumID string, start int) (string, error) {
 	params.Add("count", "50")
 	params.Add("start", fmt.Sprintf("%v", start))
 	params.Add("_expand", "LargestImage")
-	// params.Add("_expand", "HighlightImage?_shorturis=.ImageSizeDetails?_shorturis=,HighlightImage?_shorturis=.ImageAlbum?_shorturis=,HighlightImage?_shorturis=.PointOfInterestCrops?_shorturis=")
 	albumURL.RawQuery = params.Encode()
 	return albumURL.String(), nil
 }
@@ -290,15 +248,9 @@ func loopAlbum(cli *HTTPClient, ab *AlbumURLBuilder, path, albumID string) {
 	start := 1
 	total := unknownTotal
 	log.Infof("Requesting album at %q with albumID %v", path, albumID)
-	// if path != "Croquis Cafe Model Photo Database/Unique" {
-	// 	fmt.Printf("DBG Skipping...\n")
-	// 	return
-	// }
 
 	var bar *pb.ProgressBar
 	re := regexp.MustCompile(`^([^0-9]*)([0-9]+).jpg$`)
-	// sessionName -> list of sessions with same name -> index in that session
-	// sessions := make(map[string][]map[int]bool)
 	type Session struct {
 		Count   int
 		Indexes map[int]bool
@@ -310,7 +262,6 @@ func loopAlbum(cli *HTTPClient, ab *AlbumURLBuilder, path, albumID string) {
 			log.Errorf("Can't build album URL: %v", err)
 			continue
 		}
-		// fmt.Printf("DBG url: %v\n", albumURL)
 
 		var album FolderResponse
 		if err := cli.ReqJSON(albumURL, &album); err != nil {
@@ -322,25 +273,7 @@ func loopAlbum(cli *HTTPClient, ab *AlbumURLBuilder, path, albumID string) {
 			bar = pb.ProgressBarTemplate(pbTmpl).Start(total)
 		}
 		start += album.Response.Pages.Count
-		// fmt.Printf("DBG %+v\n", album)
 		for _, image := range album.Response.AlbumImage {
-			// prefix := fmt.Sprintf("%04d", start+i)
-			// t := time.UnixMilli(0)
-			// var err error
-			// if image.DateTimeOriginal != "" {
-			// 	t, err = time.Parse(time.RFC3339, image.DateTimeOriginal)
-			// 	if err != nil {
-			// 		log.Warnf("can't parse image.DateTimeOriginal: %v", err)
-			// 	}
-			// } else if image.DateTimeUploaded != "" {
-			// 	t, err = time.Parse(time.RFC3339, image.DateTimeUploaded)
-			// 	if err != nil {
-			// 		log.Warnf("can't parse image.DateTimeOriginal: %v", err)
-			// 	}
-			// }
-			// if t != time.UnixMilli(0) && err == nil {
-			// 	prefix = fmt.Sprintf("%010v", t.Unix())
-			// }
 			var sessionName string
 			var index int
 			match := re.FindStringSubmatch(image.FileName)
@@ -370,11 +303,8 @@ func loopAlbum(cli *HTTPClient, ab *AlbumURLBuilder, path, albumID string) {
 				sessions[sessionName].Indexes[index] = true
 			}
 			prefix := fmt.Sprintf("%02d", sessions[sessionName].Count)
-			// sessionID := fmt.Sprintf("%v_%v", prefix, sessionName)
 			fileName := fmt.Sprintf("%v_%v", prefix, image.FileName)
-			// fmt.Printf("image.FileName: %q sessionID: %q index: %v -> %v\n", image.FileName, sessionID, index, fileName)
 			filePath := filepath.Join(path, fileName)
-			// fmt.Printf("DBG %v Image %v -> %v\n", start+i, image.FileName, image.ArchivedUri)
 			imageHash, imageURL := imageHashURL(cli, &album, &image)
 			hash := md5.New()
 			file, err := os.Open(filePath)
@@ -411,13 +341,12 @@ func loopAlbum(cli *HTTPClient, ab *AlbumURLBuilder, path, albumID string) {
 }
 
 type FolderURLBuilder struct {
-	APIKey string
+	BaseURL string
+	APIKey  string
 }
 
 func (b *FolderURLBuilder) URL(nodeID string, start int) (string, error) {
-	baseURL := "https://modelindexdatabase.smugmug.com"
-	// folderURL := fmt.Sprintf("%v/api/v2/node/%v!children", baseURL, nodeID)
-	folderURL, err := url.Parse(fmt.Sprintf("%v/api/v2/node/%v!children", baseURL, nodeID))
+	folderURL, err := url.Parse(fmt.Sprintf("%v/api/v2/node/%v!children", b.BaseURL, nodeID))
 	if err != nil {
 		return "", fmt.Errorf("Unable to parse baseURL: %w", err)
 	}
@@ -430,7 +359,6 @@ func (b *FolderURLBuilder) URL(nodeID string, start int) (string, error) {
 	params.Add("SortDirection", "Descending")
 	params.Add("count", "50")
 	params.Add("start", fmt.Sprintf("%v", start))
-	// params.Add("_expand", "HighlightImage?_shorturis=.ImageSizeDetails?_shorturis=,HighlightImage?_shorturis=.ImageAlbum?_shorturis=,HighlightImage?_shorturis=.PointOfInterestCrops?_shorturis=")
 	folderURL.RawQuery = params.Encode()
 	return folderURL.String(), nil
 }
@@ -452,10 +380,8 @@ func loopFolder(cli *HTTPClient, fb *FolderURLBuilder, path, nodeID string) {
 			log.Errorf("Unable to get folder at url %v: %v", folderURL, err)
 			continue
 		}
-		// fmt.Printf("DBG %+v\n", folder.Response.Pages)
 
 		for _, node := range folder.Response.Node {
-			// fmt.Printf("DBG %v Node %v (%v) -> %v uris:%+v\n", start+i, node.Name, node.Type, node.NodeID, node.Uris)
 			subPath := filepath.Join(path, node.Name)
 			if err := os.MkdirAll(subPath, 0755); err != nil {
 				log.Errorf("cannot mkdir subPath %v: %v", subPath, err)
@@ -465,7 +391,7 @@ func loopFolder(cli *HTTPClient, fb *FolderURLBuilder, path, nodeID string) {
 			case "Folder":
 				loopFolder(cli, fb, subPath, node.NodeID)
 			case "Album":
-				ab := AlbumURLBuilder{APIKey: fb.APIKey}
+				ab := AlbumURLBuilder{APIKey: fb.APIKey, BaseURL: fb.BaseURL}
 				albumID := strings.TrimPrefix(node.Uris.Album.Uri, "/api/v2/album/")
 				loopAlbum(cli, &ab, subPath, albumID)
 			default:
@@ -478,13 +404,15 @@ func loopFolder(cli *HTTPClient, fb *FolderURLBuilder, path, nodeID string) {
 	}
 }
 
-const mainNodeID = "4nXMLW"
-
 func main() {
 	var apiKey string
 	var smsessCookie string
-	flag.StringVar(&apiKey, "apiKey", "", "APIKey")                    // Example: "W0g9oqdOrzuhEpIQ2qaTXimrzsfryKSZ"
-	flag.StringVar(&smsessCookie, "smsessCookie", "", "SMSESS Cookie") // Example: "8dcca98ca4fe18d84bb9d2feb2dcd3f3"
+	var nodeID string
+	var baseURL string
+	flag.StringVar(&apiKey, "apiKey", "", "APIKey")
+	flag.StringVar(&smsessCookie, "smsessCookie", "", "SMSESS Cookie")
+	flag.StringVar(&nodeID, "nodeID", "", "main nodeID")
+	flag.StringVar(&baseURL, "baseURL", "", "base URL")
 	flag.Parse()
 
 	if apiKey == "" {
@@ -493,15 +421,15 @@ func main() {
 	if smsessCookie == "" {
 		log.Fatalf("Missing smsessCookie flag")
 	}
+	if nodeID == "" {
+		log.Fatalf("Missing nodeID flag")
+	}
+	if baseURL == "" {
+		log.Fatalf("Missing baseURL flag")
+	}
 
 	cli := NewHTTPClient(userAgentDefault, smsessCookie)
 
-	fb := FolderURLBuilder{APIKey: apiKey}
-	loopFolder(cli, &fb, ".", mainNodeID)
-	// nodeID := "4nXMLW" // main nodeID
-	// nodeID := "HhLVs7"
-
-	// ab := AlbumURLBuilder{APIKey: apiKey}
-	// albumID := "W8hVzH"
-	// loopAlbum(cli, &ab, "Croquis Cafe Model Photo Database/Helen Troy", albumID)
+	fb := FolderURLBuilder{APIKey: apiKey, BaseURL: baseURL}
+	loopFolder(cli, &fb, ".", nodeID)
 }

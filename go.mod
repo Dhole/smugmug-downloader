@@ -1,4 +1,4 @@
-module croquiscafe-downloader
+module smugmug-downloader
 
 go 1.17
 
