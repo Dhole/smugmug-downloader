@@ -1,9 +1,12 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"regexp"
 	"strconv"
@@ -295,7 +298,12 @@ func loopAlbum(cli *HTTPClient, ab *AlbumURLBuilder, path, albumID string) {
 	var bar *pb.ProgressBar
 	re := regexp.MustCompile(`^([^0-9]*)([0-9]+).jpg$`)
 	// sessionName -> list of sessions with same name -> index in that session
-	sessions := make(map[string][]map[int]bool)
+	// sessions := make(map[string][]map[int]bool)
+	type Session struct {
+		Count   int
+		Indexes map[int]bool
+	}
+	sessions := make(map[string]Session)
 	for start < total {
 		albumURL, err := ab.URL(albumID, start)
 		if err != nil {
@@ -333,67 +341,70 @@ func loopAlbum(cli *HTTPClient, ab *AlbumURLBuilder, path, albumID string) {
 			// if t != time.UnixMilli(0) && err == nil {
 			// 	prefix = fmt.Sprintf("%010v", t.Unix())
 			// }
-			var session string
+			var sessionName string
 			var index int
 			match := re.FindStringSubmatch(image.FileName)
 			if match == nil {
-				session = strings.TrimSuffix(image.FileName, ".jpg")
+				sessionName = strings.TrimSuffix(image.FileName, ".jpg")
 				index = 0
 			} else {
-				session = match[1]
+				sessionName = match[1]
 				index, err = strconv.Atoi(match[2])
 				if err != nil {
 					log.Fatalf("can't convert %q to int: %v", match[2], err)
 				}
 			}
-			if _, ok := sessions[session]; !ok {
-				sessions[session] = make([]map[int]bool, 1)
-				sessions[session][0] = make(map[int]bool)
+			if _, ok := sessions[sessionName]; !ok {
+				sessions[sessionName] = Session{
+					Count:   0,
+					Indexes: make(map[int]bool),
+				}
 			}
-			last := sessions[session][len(sessions[session])-1]
-			if _, ok := last[index]; !ok {
-				last[index] = true
+			if _, ok := sessions[sessionName].Indexes[index]; !ok {
+				sessions[sessionName].Indexes[index] = true
 			} else {
-				sessions[session] = append(sessions[session], make(map[int]bool))
-				last := sessions[session][len(sessions[session])-1]
-				last[index] = true
+				sessions[sessionName] = Session{
+					Count:   sessions[sessionName].Count + 1,
+					Indexes: make(map[int]bool),
+				}
+				sessions[sessionName].Indexes[index] = true
 			}
-			prefix := fmt.Sprintf("%02d", len(sessions[session])-1)
-			sessionID := fmt.Sprintf("%v_%v", prefix, session)
+			prefix := fmt.Sprintf("%02d", sessions[sessionName].Count)
+			// sessionID := fmt.Sprintf("%v_%v", prefix, sessionName)
 			fileName := fmt.Sprintf("%v_%v", prefix, image.FileName)
-			fmt.Printf("image.FileName: %q sessionID: %q index: %v -> %v\n", image.FileName, sessionID, index, fileName)
-			// filePath := filepath.Join(path, fileName)
-			// // fmt.Printf("DBG %v Image %v -> %v\n", start+i, image.FileName, image.ArchivedUri)
-			// imageHash, imageURL := imageHashURL(cli, &album, &image)
-			// hash := md5.New()
-			// file, err := os.Open(filePath)
-			// if err == nil {
-			// 	if _, err := io.Copy(hash, file); err != nil {
-			// 		log.Errorf("can'read open file %v: %v", filePath, err)
-			// 		continue
-			// 	}
-			// 	fileHash := hex.EncodeToString(hash.Sum(nil)[:16])
-			// 	if fileHash == imageHash {
-			// 		bar.Increment()
-			// 		continue
-			// 	}
-			// 	log.Infof("hash mismatch for existing file %v, downloading again", filePath)
+			// fmt.Printf("image.FileName: %q sessionID: %q index: %v -> %v\n", image.FileName, sessionID, index, fileName)
+			filePath := filepath.Join(path, fileName)
+			// fmt.Printf("DBG %v Image %v -> %v\n", start+i, image.FileName, image.ArchivedUri)
+			imageHash, imageURL := imageHashURL(cli, &album, &image)
+			hash := md5.New()
+			file, err := os.Open(filePath)
+			if err == nil {
+				if _, err := io.Copy(hash, file); err != nil {
+					log.Errorf("can'read open file %v: %v", filePath, err)
+					continue
+				}
+				fileHash := hex.EncodeToString(hash.Sum(nil)[:16])
+				if fileHash == imageHash {
+					bar.Increment()
+					continue
+				}
+				log.Infof("hash mismatch for existing file %v, downloading again", filePath)
 
-			// } else if !os.IsNotExist(err) && err != nil {
-			// 	log.Errorf("can't open file %v: %v", filePath, err)
-			// 	continue
-			// }
+			} else if !os.IsNotExist(err) && err != nil {
+				log.Errorf("can't open file %v: %v", filePath, err)
+				continue
+			}
 
-			// imgData, err := cli.Req(imageURL)
-			// if err != nil {
-			// 	log.Errorf("can't request %v: %v", image.ArchivedUri, err)
-			// 	continue
-			// }
-			// if err := ioutil.WriteFile(filePath, imgData, 0644); err != nil {
-			// 	log.Errorf("can't write image file %v: %v", filePath, err)
-			// 	continue
-			// }
-			// bar.Increment()
+			imgData, err := cli.Req(imageURL)
+			if err != nil {
+				log.Errorf("can't request %v: %v", image.ArchivedUri, err)
+				continue
+			}
+			if err := ioutil.WriteFile(filePath, imgData, 0644); err != nil {
+				log.Errorf("can't write image file %v: %v", filePath, err)
+				continue
+			}
+			bar.Increment()
 		}
 	}
 	bar.Finish()
@@ -485,12 +496,12 @@ func main() {
 
 	cli := NewHTTPClient(userAgentDefault, smsessCookie)
 
-	// fb := FolderURLBuilder{APIKey: apiKey}
-	// // nodeID := "4nXMLW" // main nodeID
+	fb := FolderURLBuilder{APIKey: apiKey}
+	loopFolder(cli, &fb, ".", mainNodeID)
+	// nodeID := "4nXMLW" // main nodeID
 	// nodeID := "HhLVs7"
-	// loopFolder(cli, &fb, ".", mainNodeID)
 
-	ab := AlbumURLBuilder{APIKey: apiKey}
-	albumID := "W8hVzH"
-	loopAlbum(cli, &ab, "Croquis Cafe Model Photo Database/Helen Troy", albumID)
+	// ab := AlbumURLBuilder{APIKey: apiKey}
+	// albumID := "W8hVzH"
+	// loopAlbum(cli, &ab, "Croquis Cafe Model Photo Database/Helen Troy", albumID)
 }
